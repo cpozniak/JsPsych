@@ -30,7 +30,7 @@ var WordByWordPlugin = (function(jspsych) {
         words: trial.words
       };
       var current_position = 0;
-      var word_list = trial.words.split(' ');
+      var word_list = trial.words.split('-');
       var n_words = word_list.length;
 
       function show_next_word(position) {
