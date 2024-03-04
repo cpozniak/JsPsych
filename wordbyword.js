@@ -7,7 +7,7 @@ var WordByWordPlugin = (function(jspsych) {
         type: jspsych.ParameterType.STRING,
         pretty_name: 'Words',
         default: undefined,
-        description: 'The words to be displayed, separated by forward slashes (/). Use underscores (_) to represent spaces within a word.'
+        description: 'The words to be displayed, separated by spaces. Use underscores (_) to represent spaces within a word.'
       },
       stimulus_duration: {
         type: jspsych.ParameterType.INT,
@@ -28,31 +28,26 @@ var WordByWordPlugin = (function(jspsych) {
         words: trial.words
       };
       var current_position = 0;
-      var segment_list = trial.words.split('/');
-      var n_segments = segment_list.length;
+      var word_list = trial.words.split(' ');
+      var n_words = word_list.length;
 
-      function show_next_segment(position) {
-        if (position < n_segments) {
+      function show_next_word(position) {
+        if (position < n_words) {
           var stimulus = '';
-          for (var i = 0; i < n_segments; i++) {
-            var segment = segment_list[i];
-            var words = segment.split('_');
-            var displayed_words = [];
+          for (var i = 0; i < n_words; i++) {
+            var word = word_list[i];
+            var displayed_word = word.replace(/_/g, ' '); // Replace underscores with spaces
 
-            for (var j = 0; j < words.length; j++) {
-              if (i === position && j === current_position) {
-                displayed_words.push(words[j]);
-              } else {
-                displayed_words.push('-'.repeat(words[j].length));
-              }
+            if (i === position) {
+              stimulus += displayed_word + ' ';
+            } else {
+              stimulus += '-'.repeat(word.length) + ' ';
             }
-
-            stimulus += displayed_words.join(' ') + ' ';
           }
           display_element.innerHTML = "<p style='font-family: Arial; font-size: 32pt;'>" + stimulus.trim() + "</p>";
           current_position++;
           jsPsych.pluginAPI.setTimeout(function() {
-            show_next_segment(current_position);
+            show_next_word(current_position);
           }, trial.stimulus_duration);
         } else {
           end_trial();
@@ -64,7 +59,7 @@ var WordByWordPlugin = (function(jspsych) {
         jsPsych.finishTrial(trial_data);
       }
 
-      show_next_segment(current_position);
+      show_next_word(current_position);
     };
   }
 
