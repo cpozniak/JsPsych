@@ -35,14 +35,13 @@ var WordByWordPlugin = (function(jspsych) {
         if (position < n_words) {
           var stimulus = '';
           for (var i = 0; i < n_words; i++) {
-            var word = word_list[i];
-            // Replace underscores with spaces
-            word = word.replace(/_/g, ' ');
+            var original_word = word_list[i];
+            var word = original_word.replace(/_/g, ' '); // Replace underscores with spaces
 
             if (i === position) {
               stimulus += word + ' ';
             } else {
-              stimulus += '-'.repeat(word.length) + ' ';
+              stimulus += '-'.repeat(original_word.length) + ' '; // Use the original word's length for the mask
             }
           }
           display_element.innerHTML = "<p style='font-family: Arial; font-size: 32pt;'>" + stimulus.trim() + "</p>";
