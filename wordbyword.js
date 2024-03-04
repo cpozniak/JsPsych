@@ -1,5 +1,3 @@
-// I developped a plugin for a speeded acceptabliy judgment task. For that, I took the code shared on https://github.com/jspsych/jsPsych/discussions/1772 and I adapted it for the task.
-
 var WordByWordPlugin = (function(jspsych) {
 
   const info = {
@@ -37,10 +35,14 @@ var WordByWordPlugin = (function(jspsych) {
         if (position < n_words) {
           var stimulus = '';
           for (var i = 0; i < n_words; i++) {
+            var word = word_list[i];
+            // Replace underscores with spaces
+            word = word.replace(/_/g, ' ');
+
             if (i === position) {
-              stimulus += word_list[i] + ' ';
+              stimulus += word + ' ';
             } else {
-              stimulus += '-'.repeat(word_list[i].length ) + ' ';
+              stimulus += '-'.repeat(word.length) + ' ';
             }
           }
           display_element.innerHTML = "<p style='font-family: Arial; font-size: 32pt;'>" + stimulus.trim() + "</p>";
