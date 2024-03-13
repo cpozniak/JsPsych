@@ -44,7 +44,7 @@ var WordByWordPlugin = (function(jspsych) {
               stimulus += '_'.repeat(word.length) + ' ';
             }
           }
-          display_element.innerHTML = "<p style='font-family: Arial; font-size: 32pt;'>" + stimulus.trim() + "</p>";
+          display_element.innerHTML = "<p style='font-family: Arial; font-size: 20pt;'>" + stimulus.trim() + "</p>";
           current_position++;
           jsPsych.pluginAPI.setTimeout(function() {
             show_next_word(current_position);
