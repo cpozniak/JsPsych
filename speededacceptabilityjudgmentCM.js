@@ -47,10 +47,10 @@ var WordByWordPlugin = (function(jspsych) {
             if (i === position) {
               stimulus += displayed_word + ' ';
             } else {
-              stimulus += '_'.repeat(word.length) + ' '; // Use underscores
+            
             }
           }
-          display_element.innerHTML = "<p style='font-family: Courier, monospace; font-size: 18pt;'>" + stimulus.trim() + "</p>";
+          display_element.innerHTML = "<p style='font-family: Courier, monospace; font-size: 20pt;'>" + stimulus.trim() + "</p>";
           current_position++;
           jsPsych.pluginAPI.setTimeout(() => {
             show_next_word(current_position, this);
