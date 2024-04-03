@@ -27,26 +27,7 @@ var WordByWordPlugin = (function(jspsych) {
       var doc = new DOMParser().parseFromString(input, "text/html");
       return doc.documentElement.textContent;
     }
-
-    getFillerCharacter() {
-      // Retourne un caractère de remplissage invisible avec la même largeur qu'un tiret bas
-      return '\u200b'; // Caractère "zero width space"
-    }
-
-    getMaxCharacterWidth() {
-      // Retourne la largeur du caractère chinois le plus large
-      var maxWidth = 0;
-      for (var i = 0; i < 0x9FA5; i++) {
-        var char = String.fromCodePoint(i);
-        var span = document.createElement('span');
-        span.textContent = char;
-        document.body.appendChild(span);
-        var width = span.offsetWidth;
-        document.body.removeChild(span);
-        maxWidth = Math.max(maxWidth, width);
-      }
-      return maxWidth;
-    }
+  
 
     trial(display_element, trial) {
       var trial_data = {
@@ -55,7 +36,6 @@ var WordByWordPlugin = (function(jspsych) {
       var current_position = 0;
       var word_list = this.htmlDecode(trial.words).split(' ');
       var n_words = word_list.length;
-      var max_character_width = this.getMaxCharacterWidth();
 
       const show_next_word = (position, that) => {
         if (position < n_words) {
@@ -65,19 +45,12 @@ var WordByWordPlugin = (function(jspsych) {
             var displayed_word = that.htmlDecode(word).replace(/_/g, ' ');
 
             if (i === position) {
-              var word_spans = displayed_word.split('').map(function(char) {
-                return '<span style="display: inline-block; width: ' + max_character_width + 'px;">' + char + '</span>';
-              });
-              stimulus += word_spans.join('') + ' ';
+              stimulus += displayed_word + ' ';
             } else {
-              var filler = '';
-              for (var j = 0; j < word.length; j++) {
-                filler += '<span style="display: inline-block; width: ' + max_character_width + 'px;">' + that.getFillerCharacter() + '</span>';
-              }
-              stimulus += filler + ' ';
+              stimulus += '_'.repeat(word.length) + ' '; // Use underscores
             }
           }
-          display_element.innerHTML = "<p style='font-size: 20pt;'>" + stimulus.trim() + "</p>";
+          display_element.innerHTML = "<p style='font-family: Courier, monospace; font-size: 18pt;'>" + stimulus.trim() + "</p>";
           current_position++;
           jsPsych.pluginAPI.setTimeout(() => {
             show_next_word(current_position, this);
@@ -93,6 +66,7 @@ var WordByWordPlugin = (function(jspsych) {
       }
 
       show_next_word(current_position, this);
+
 
     };
   }
