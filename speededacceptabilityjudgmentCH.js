@@ -28,6 +28,11 @@ var WordByWordPlugin = (function(jspsych) {
       return doc.documentElement.textContent;
     }
 
+    getFillerCharacter() {
+      // Retourne un caractère de remplissage invisible avec la même largeur qu'un caractère chinois
+      return '\u200b'; // Caractère "zero width space"
+    }
+
     trial(display_element, trial) {
       var trial_data = {
         words: trial.words
@@ -44,9 +49,13 @@ var WordByWordPlugin = (function(jspsych) {
             var displayed_word = that.htmlDecode(word).replace(/_/g, ' ');
 
             if (i === position) {
-              stimulus += `<span style="font-family: 'Courier New', monospace;">${displayed_word}</span> `;
+              stimulus += displayed_word + ' ';
             } else {
-              stimulus += `<span style="font-family: 'Courier New', monospace;">${'_'.repeat(word.length)}</span> `;
+              var filler = '';
+              for (var j = 0; j < word.length; j++) {
+                filler += that.getFillerCharacter();
+              }
+              stimulus += filler + ' ';
             }
           }
           display_element.innerHTML = "<p style='font-size: 20pt;'>" + stimulus.trim() + "</p>";
