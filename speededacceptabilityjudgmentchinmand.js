@@ -27,14 +27,14 @@ var WordByWordPlugin = (function(jspsych) {
       var doc = new DOMParser().parseFromString(input, "text/html");
       return doc.documentElement.textContent;
     }
-  
 
     trial(display_element, trial) {
       var trial_data = {
         words: trial.words
       };
       var current_position = 0;
-      var word_list = this.htmlDecode(trial.words).split(' ');
+      // Remplacez les tirets soulignés par des espaces vides avant de découper en mots
+      var word_list = this.htmlDecode(trial.words).replace(/_/g, '').split(' ');
       var n_words = word_list.length;
 
       const show_next_word = (position, that) => {
@@ -42,12 +42,11 @@ var WordByWordPlugin = (function(jspsych) {
           var stimulus = '';
           for (var i = 0; i < n_words; i++) {
             var word = word_list[i];
-            var displayed_word = that.htmlDecode(word).replace(/_/g, ' ');
 
             if (i === position) {
-              stimulus += displayed_word + ' ';
+              stimulus += word + ' ';
             } else {
-            stimulus += '_'.repeat(word.length) + ' '; 
+              stimulus += '_'.repeat(word.length) + ' '; // Use underscores
             }
           }
           display_element.innerHTML = "<p style='font-family: Courier, monospace; font-size: 20pt;'>" + stimulus.trim() + "</p>";
@@ -66,7 +65,6 @@ var WordByWordPlugin = (function(jspsych) {
       }
 
       show_next_word(current_position, this);
-
 
     };
   }
