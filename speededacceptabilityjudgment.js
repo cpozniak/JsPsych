@@ -24,6 +24,7 @@ var WordByWordPlugin = (function(jspsych) {
     }
 
     htmlDecode(input) {
+      input = input.replace(/&#x200b;/g, '\u200b').replace(/\\u200b/g, '\u200b');
       var doc = new DOMParser().parseFromString(input, "text/html");
       return doc.documentElement.textContent;
     }
@@ -47,7 +48,7 @@ var WordByWordPlugin = (function(jspsych) {
             if (i === position) {
               stimulus += displayed_word + ' ';
             } else {
-              stimulus += '_'.repeat(word.length) + ' '; // Use underscores
+            stimulus += '\u200b'.repeat(word.length) + ' '; // Use zero-width spaces
             }
           }
           display_element.innerHTML = "<p style='font-family: Courier, monospace; font-size: 20pt;'>" + stimulus.trim() + "</p>";
